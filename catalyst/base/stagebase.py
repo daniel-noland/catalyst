@@ -1098,23 +1098,6 @@ class StageBase(TargetBase, ClearBase, GenBase):
                       "/usr/share/portage/config/make.conf.example "
                       "for a more\n# detailed example.\n")
 
-            for flags in ["COMMON_FLAGS", "CFLAGS", "CXXFLAGS", "FCFLAGS", "FFLAGS",
-                          "LDFLAGS", "ASFLAGS"]:
-                if flags in ["LDFLAGS", "ASFLAGS"]:
-                    if not flags in self.settings:
-                        continue
-                    myf.write("# %s is unsupported.  USE AT YOUR OWN RISK!\n"
-                              % flags)
-                if flags not in self.settings or (flags != "COMMON_FLAGS" and
-                                                  self.settings[flags] == self.settings["COMMON_FLAGS"]):
-                    myf.write('%s="${COMMON_FLAGS}"\n' % flags)
-                elif isinstance(self.settings[flags], list):
-                    myf.write('%s="%s"\n'
-                              % (flags, ' '.join(self.settings[flags])))
-                else:
-                    myf.write('%s="%s"\n'
-                              % (flags, self.settings[flags]))
-
             if "CBUILD" in self.settings:
                 myf.write("# This should not be changed unless you know exactly"
                           " what you are doing.  You\n# should probably be "
