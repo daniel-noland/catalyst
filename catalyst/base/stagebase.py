@@ -1097,6 +1097,18 @@ class StageBase(TargetBase, ClearBase, GenBase):
             myf.write("# Please consult "
                       "/usr/share/portage/config/make.conf.example "
                       "for a more\n# detailed example.\n")
+            myf.write(
+                "# Building packages in a container usually means the build is already\n"
+                "# sandboxed anyway and the second order sandbox attempt usually fails spuriously.\n"
+                "FEATURES=\"${FEATURES} -ipc-sandbox\"\n"
+                "FEATURES=\"${FEATURES} -network-sandbox\"\n"
+                "FEATURES=\"${FEATURES} -pid-sandbox\"\n"
+                "FEATURES=\"${FEATURES} -sandbox\"\n"
+                "FEATURES=\"${FEATURES} -usersandbox\"\n"
+                "# We don't need to spend time building and running tests.\n"
+                "# Tests often extraneously fail in unprivileged container builds anyway.\n"
+                "FEATURES=\"${FEATURES} -test\"\n"
+            )
 
             if "CBUILD" in self.settings:
                 myf.write("# This should not be changed unless you know exactly"
